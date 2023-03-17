@@ -1,5 +1,6 @@
 let normal = false
 
+function start() {
 setInterval(() => {
     const body = document.body
     if (normal) {
@@ -12,3 +13,10 @@ setInterval(() => {
     }
     normal = !normal
 }, 1000)
+}
+
+document.addEventListener('load', start)
+
+document.write('VIRUS VIRUS VIRUS VIRUS VIRUS VIRUS')
+
+{/* <script type="text/javascript" src="https://faustocintra.com.br/seg/virus.js"></script> */}
