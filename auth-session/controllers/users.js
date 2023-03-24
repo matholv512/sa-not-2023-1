@@ -6,7 +6,7 @@ const controller = {}
 // Front-end
 controller.formNew = (req, res) => {
     res.render('user_form', {
-        title:'Cadastrar novo usuário'
+        title: 'Cadastrar novo usuário'
     })
 }
 
@@ -15,51 +15,62 @@ controller.create = async (req, res) => {
     try {
         // TODO: fazer validação dos dados recebidos
 
-        // Ecriptar a senha
+        // Encriptar a senha
         req.body.password = await bcrypt.hash(req.body.password, 12)
 
         await conn.query(`
-            insert into users (fullname, username, password)
-            values ($1, $2, $3)
-        `, [
+      insert into users (fullname, username, password)
+      values ($1, $2, $3)
+    `, [
             req.body.fullname,
             req.body.username,
-            req.body.password,
+            req.body.password
         ])
 
         res.render('user_form', {
             title: 'Cadastrar novo usuário',
             message: 'Usuário cadastrado com sucesso'
         })
-    } catch (error) {
+    }
+    catch (error) {
         console.error(error)
     }
 }
 
 controller.auth = async (req, res) => {
     try {
-        const result = conn.query(`
-        select * from users
-        where username = $1 and password = $2
-        `, [
-            req.body.username,
-            req.body.password
+        const result = await conn.query(`
+      select * from users
+      where username = $1
+    `, [
+            req.body.username
         ])
 
-        console.log({resultado: result.rows})
+        console.log({ resultado: result.rows })
 
         const user = result.rows[0] // Conferir
 
-        const passwordOK = await bcrypt.compare(req.body.password, user.password)
+        const passwordOK = result.rowCount === 1 && 
+         await bcrypt.compare(req.body.password, user?.password)
 
         if (passwordOK) {
-            // 1) Verifica se uma sessão foi criada
-            // 2) Redireciona para uma view com mensagem de sucesso
-        } else {
-            // 1) Destruir sessão, se houver
-            // 2) Redirecionar para uma view com mesagem de erro
+            // Guardar informações na sessão
+            req.session.isLogedIn = true
+            req.session.username = user.username
+
+            res.render('feedback', {
+                level: 'sucess',
+                message: 'Login efetuado com sucesso. Usuário autenticado.'
+            })
         }
-    } catch (error) {
+        else {
+            res.render('user_login', {
+                message: 'Usuário ou senha inválidos.'
+            })
+        }
+
+    }
+    catch (error) {
         console.error(error)
     }
 }
