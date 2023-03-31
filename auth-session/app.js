@@ -1,4 +1,5 @@
 require('dotenv').config()
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -25,7 +26,7 @@ const sessionConfig = {
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge : 7 * 24 * 60 * 60 * 1000, // 7 dias
+    maxAge : 7 * 24 * 60 * 60 * 1000,  // 7 dias
     httpOnly: true
   }
 }

@@ -5,20 +5,20 @@
 
   {% if message %}
     <div style="border: 1px solid red; background-color: mistyrose; padding: 20px">
-        {{message}}
+      {{message}}
     </div>
   {% endif %}
   
   <form method="POST" action="/users/auth">
     <br>
     <label>
-        <span>Nome de usuário:</span>
-        <input name="username">
+      <span>Nome de usuário:</span>
+      <input name="username">
     </label>
     <br>
     <label>
-        <span>Senha:</span>
-        <input type="password" id="passowrd" name="password">
+      <span>Senha:</span>
+      <input type="password" id="password" name="password">
     </label>
     <div>
       <input type="submit" value="Autenticar">
