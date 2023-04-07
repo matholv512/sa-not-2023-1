@@ -17,6 +17,9 @@ const pgSession = require('connect-pg-simple')(expressSession)
 
 var app = express();
 
+const helmet = require('helmet')
+app.use(helmet.hidePoweredBy()) // Esconde a tecnologia de desenvolvimento (express)
+
 const sessionConfig = {
   store: new pgSession({
     pool: dbConn
